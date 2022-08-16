@@ -1,0 +1,28 @@
+body{
+    background-color:black;
+    color:white;
+    text-align: center;
+}
+
+.wrapper{
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    width: 600px;
+    height: 600px;
+    margin: 0 auto;
+}
+.wrapper>div{
+    border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 120px;
+}
+
+button{
+    background-color: red;
+    margin-top:20px;
+    padding:15px;
+    color:white;
+    border-radius: 10px;
+}
