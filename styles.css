@@ -1,28 +1,131 @@
-body{
-    background-color:black;
-    color:white;
-    text-align: center;
+/* RESET */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-.wrapper{
-    display: grid;
-    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
-    width: 600px;
-    height: 600px;
-    margin: 0 auto;
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
 }
-.wrapper>div{
-    border: 1px solid white;
+
+body {
+    min-height: 100vh;
+}
+
+body, input, button {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* STYLING */
+body {
+    background-color: #002B5B;
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player-names {
+    display: none;
+    flex-direction: column;
+}
+
+.player-names input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #256D85;
+    min-width: 30vw;
+    max-width: 90vw;
+    margin-bottom: 60px;
+    height: 60px;
+    color: #FFF;
+    font-size: 40px;
+}
+
+.player-names input:focus {
+    outline: 0;
+}
+
+.player-names.visible {
+    display: flex;
+}
+
+.game {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game.visible {
+    display: flex;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.current-player {
+    font-size: 30px;
+}
+
+.board {
+    display: grid;
+    grid-template: repeat(3, 30vw) / repeat(3, 30vw);
+    margin: 10vh auto;
+}
+
+.board-item {
+    border: 3px solid #8FE3CF;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 120px;
 }
 
-button{
-    background-color: red;
-    margin-top:20px;
-    padding:15px;
-    color:white;
-    border-radius: 10px;
+.board-item.win {
+    background-color: #2B4865;
+}
+
+.board-item:nth-child(-n + 3) {
+    border-top: none;
+}
+
+.board-item:nth-child(3n) {
+    border-right: none;
+}
+
+.board-item:nth-child(3n  - 2) {
+    border-left: none;
+}
+
+.board-item:nth-child(n + 7) {
+    border-bottom: none;
+}
+
+button {
+    border: 2px solid #256D85;
+    background: transparent;
+    color: #FFF;
+    font-size: 20px;
+    border-radius: 5px;
+    padding: 20px;
+    cursor: pointer;
+    min-width: 30vw;
+    max-width: 90vw;
+    text-shadow: 1px 1px #000;
+}
+
+button:hover {
+    background: #8FE3CF;
 }

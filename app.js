@@ -1,62 +1,94 @@
-function getPlayerName() {
-    return new Promise((resolve, reject) => {
-       let playerName = prompt('What is your name');
-        if (playerName !== null) {
-            resolve(playerName);
-        }
-    });
-}
+const winningCombinations = [
+	[0, 1, 2],
+	[3, 4, 5],
+	[6, 7, 8],
+	[0, 3, 6],
+	[1, 4, 7],
+	[2, 5, 8],
+	[0, 4, 8],
+	[2, 4, 6]
+];
 
-window.addEventListener('load', async () => {
-    if(!sessionStorage.getItem('playerOne')){
-        sessionStorage.setItem('playerOne', await getPlayerName());
-    }
-    if(!sessionStorage.getItem('playerTwo')){
-        sessionStorage.setItem('playerTwo', await getPlayerName());
-    }
-    current.innerHTML = activePlayer;
+const $playerNames = document.querySelector('.player-names');
+const $playerOneNameInput = document.querySelector('#nameOne');
+const $playerTwoNameInput = document.querySelector('#nameTwo');
+const $nameSubmit = document.querySelector('#submit');
+const $game = document.querySelector('.game');
+const $current = document.querySelector(".current-player > span");
+const $boxes = document.querySelectorAll(".board-item");
+const $resetGame = document.querySelector("#reset");
+const xSymbol = `<i class="fa-solid fa-x"></i>`;
+const oSymbol = `<i class="fa-solid fa-o"></i>`;
+let xMarks = [];
+let oMarks = [];
+
+let playerOneName, playerTwoName, activePlayer;
+
+$playerOneNameInput.addEventListener('change', (e) => {
+    playerOneName = e.target.value;
 });
-let current = document.querySelector("span");
 
-let player1 = sessionStorage.getItem('playerOne');
-let player2 = sessionStorage.getItem('playerTwo');
+$playerTwoNameInput.addEventListener('change', (e) => {
+    playerTwoName = e.target.value;
+});
 
-let activePlayer = player1;
-
-const generateSymbol = () =>{
-    return activePlayer === player1 ? "X" : "O";
-}
-
-const togglePlayer = () =>{
-    return activePlayer === player1 ? player2 : player1;
-}
-
-const $el = document.querySelectorAll(".wrapper > div ");
-
-$el.forEach(elem => elem.addEventListener("click", (e) => {
-    if(!e.target.innerHTML){
-    e.target.innerHTML = generateSymbol();
-    activePlayer = togglePlayer();
-    current.innerHTML = activePlayer;
+$nameSubmit.addEventListener('click', () => {
+    if (!playerOneName || !playerTwoName) {
+        return;
     }
-}))
+    
+    $playerNames.classList.toggle('visible');
+    $game.classList.toggle('visible');
+    activePlayer = playerOneName;
+    $current.innerHTML = activePlayer;
+});
 
-const button = document.querySelector("button");
-button.addEventListener("click", () =>{
-    $el.forEach(elem => elem.innerHTML = null);
-    activePlayer = player1;
-})
+$boxes.forEach(box => box.addEventListener('click', (e) => {
+    if (!e.target.innerHTML) {
+        e.target.innerHTML = generateSymbol();
 
-// let $elMatrix = [];
-// for(let i=0; i<2; i++)
+        activePlayer = togglePlayer();
+        $current.innerHTML = activePlayer;
 
-// let game = $el.reduce((total,cur)=>{
-//     cur[pos] = 
-// },[])
+        if (activePlayer === playerOneName) {
+            xMarks.push(parseInt(e.target.getAttribute('data-index'), 10));
+        } else {
+            oMarks.push(parseInt(e.target.getAttribute('data-index'), 10));
+        }
+    }
 
-// const winChecker = ($el) => {
-//     {pos: [0,2], symbol: "X"}
-//     let player1array=$el.filter(elem => elem.symbol === "X")
-//     if()
-// }
+    checkCombinations();
 
+    if (checkCombinations()) {
+        const winningCombination = checkCombinations();
+        console.log('winningCombination', winningCombination);
+        winningCombination.forEach(el => {
+            let box = document.querySelector(`[data-index="${el}"]`);
+            box.classList.add('win');
+        });
+    }
+}));
+
+$resetGame.addEventListener('click', () => {
+    $boxes.forEach(box => {
+        box.innerHTML = null;
+        box.classList.remove('win');
+    });
+    activePlayer = playerOneName;
+    xMarks = [];
+    oMarks = [];
+});
+
+function generateSymbol() {
+    return activePlayer === playerOneName ? xSymbol : oSymbol;
+}
+
+function togglePlayer() {
+    return activePlayer === playerOneName ? playerTwoName : playerOneName;
+}
+
+function checkCombinations() {
+    return winningCombinations.find(combination => {
+        return combination.every(element => xMarks.includes(element)) || combination.every(element => oMarks.includes(element));
+    });
+};
